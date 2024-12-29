@@ -18,21 +18,21 @@
     "@vivliostyle/cli": "^8.17.1",
     "c12": "^2.0.1",
     "mime-types": "^2.1.35",
-    "nuxt": "^3.15.0",
-    "vite-multiple-assets": "^2.2.5",
-    "vue": "latest",
-    "vue-router": "latest",
-    "yarn": "^1.22.22"
+    "vite-multiple-assets": "^2.2.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/mime-types": "^2",
     "diff": "^7.0.0",
-    "giget": "^1.2.3"
+    "giget": "^1.2.3",
+    "nuxt": "^3.15.0",
+    "vue": "latest",
+    "vue-router": "latest"
   },
   "workspaces": [
     ".",
-    "vivliostyle-vivliostyle-js"
+    "vivliostyle-vivliostyle-js",
+    "vivliostyle-vivliostyle-js/packages/*"
   ],
   "packageManager": "yarn@4.5.3"
 }
