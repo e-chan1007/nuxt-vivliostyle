@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import { applyPatch } from "diff";
 import { downloadTemplate } from "giget";
 import { exit } from "node:process";
+import { tmpdir } from "node:os";
 
 try {
   if ((await lstat("./viewer")).isDirectory()) {
@@ -12,17 +13,18 @@ try {
 } catch {}
 
 const { dir } = await downloadTemplate("gh:vivliostyle/vivliostyle.js#master", {
-  force: true,
+  cwd: tmpdir(),
+  force: true
 });
 
 const execProcess = (command, args, cwd = dir) => {
-  const process = spawn(command, args, { cwd });
+  const process = spawn(command, args, { cwd, stdio: "inherit" });
   return new Promise((resolve) => process.on("exit", resolve));
 };
 
 await writeFile(
   join(dir, ".yarnrc.yml"),
-  "nodeLinker: pnpm\nnmHoistingLimits: dependencies",
+  "nodeLinker: node-modules",
   "utf-8",
 );
 await execProcess("yarn", ["install"]);
@@ -34,14 +36,7 @@ await writeFile(netTSPath, applyPatch(netTS, patch), "utf-8");
 
 await execProcess(
   "yarn",
-  ["workspace", "@vivliostyle/core", "build"],
-  import.meta.dirname,
-);
-
-await execProcess(
-  "yarn",
-  ["workspace", "@vivliostyle/viewer", "build"],
-  import.meta.dirname,
+  ["build", "--ignore=@vivliostyle/react"],
 );
 
 await rm("./viewer", { recursive: true, force: true });
