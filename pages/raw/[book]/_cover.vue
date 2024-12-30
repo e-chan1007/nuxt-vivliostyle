@@ -24,17 +24,34 @@ injectBookCSSVariables(bookMeta.value, { _id: bookMeta.value.cover });
 </template>
 
 <style scoped>
-:global(body) {
-  margin: 0;
-}
 [role="doc-cover"] {
   display: block;
   width: 100vw;
   height: 100vh;
   object-fit: contain;
+  page: cover;
+  z-index: 1000;
+  position: fixed;
 }
-@page {
+@page cover {
   margin: 0;
-  size: var(--book-size, A4);
+  size: var(--book-size);
+
+  @top-left-corner { content: ""; }
+  @top-left { content: ""; }
+  @top-center { content: ""; }
+  @top-right { content: ""; }
+  @top-right-corner { content: ""; }
+  @left-top { content: ""; }
+  @left-middle { content: ""; }
+  @left-bottom { content: ""; }
+  @right-top { content: ""; }
+  @right-middle { content: ""; }
+  @right-bottom { content: ""; }
+  @bottom-left-corner { content: ""; }
+  @bottom-left { content: ""; }
+  @bottom-center { content: ""; }
+  @bottom-right { content: ""; }
+  @bottom-right-corner { content: ""; }
 }
 </style>
