@@ -14,17 +14,25 @@ const viewerPath = `/_viewer/index.html#src=${actualPath}`;
 </script>
 
 <template>
-  <iframe :src="viewerPath" class="viewer" ref="viewer" />
+  <iframe :src="viewerPath" class="vivliostyle-viewer" ref="viewer" />
 </template>
 
 <style>
 html, body, #__nuxt {
   width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
 }
-.viewer {
+
+html:has(.vivliostyle-viewer) {
+  overflow: hidden;
+
+  &, body, #__nuxt {
+    height: 100%;
+  }
+}
+
+.vivliostyle-viewer {
   width: 100%;
   height: 100%;
   border: none;
