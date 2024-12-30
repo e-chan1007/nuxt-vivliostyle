@@ -83,17 +83,17 @@ export function injectBookCSSVariables(
       {
         innerHTML: `
   :root {
-    ${Object.entries(bookMeta)
+    ${Object.entries(bookMeta ?? {})
       .filter(([_, v]) => isValid(v))
       .map(([k, v]) =>
         k === "size" ? `--book-size: ${v}` : `--book-${k}: ${toValue(v)};`,
       )
       .join("\n    ")}
-    ${Object.entries(bookMeta.props)
+    ${Object.entries(bookMeta.props ?? {})
       .filter((v): v is [string, BookCSSVariableValue] => isValid(v[1]))
       .map(([k, v]) => `--book-props-${k}: ${toValue(v)};`)
       .join("\n    ")}
-    ${Object.entries(page)
+    ${Object.entries(page ?? {})
       .filter(([_, v]) => isValid(v))
       .map(([k, v]) => `--page-${k}: ${toValue(v)};`)
       .join("\n    ")}
