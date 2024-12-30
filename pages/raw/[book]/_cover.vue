@@ -23,8 +23,8 @@ injectBookCSSVariables(bookMeta.value, { _id: bookMeta.value.cover });
   </section>
 </template>
 
-<style>
-body {
+<style scoped>
+:global(body) {
   margin: 0;
 }
 [role="doc-cover"] {
