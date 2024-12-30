@@ -4,7 +4,7 @@
     "type": "git",
     "url": "https://github.com/e-chan1007/nuxt-vivliostyle.git"
   },
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "module",
   "scripts": {
     "prepack": "node build-viewer.mjs",
@@ -31,7 +31,8 @@
     "nuxt": "^3.15.0",
     "vite-multiple-assets": "^2.2.5",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "yaml": "^2.6.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

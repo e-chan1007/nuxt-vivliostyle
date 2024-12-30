@@ -472,6 +472,7 @@ __metadata:
     vite-multiple-assets: "npm:^2.2.5"
     vue: "npm:latest"
     vue-router: "npm:latest"
+    yaml: "npm:^2.6.1"
   languageName: unknown
   linkType: soft
 
