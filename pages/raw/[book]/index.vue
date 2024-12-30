@@ -18,7 +18,7 @@ if (!bookMeta.value || !pages.value) throw createError({ status: 404 });
 </script>
 
 <template>
-  <CoverPage />
+  <CoverPage v-if="(bookMeta as ParsedContentMeta).cover" />
   <div class="book-page"  v-for="page in pages" :key="page._id">
     <BookPageContainer :book-meta="(bookMeta as ParsedContentMeta)" :page="page" />
   </div>
