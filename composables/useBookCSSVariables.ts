@@ -1,4 +1,5 @@
 import type { ParsedContentMeta } from "@nuxt/content";
+import { useServerHead } from "#build/imports";
 
 export type BookCSSVariableValue = string | boolean | number;
 type BookCSSVariableGetter = (bookMeta: ParsedContentMeta, page: ParsedContentMeta) => BookCSSVariableValue;
@@ -9,7 +10,17 @@ export function useBookCSSVariables() {
   return variables;
 }
 
+/**
+ * 本の各ページで利用できるようなCSS変数を定義する
+ * @param name 変数名(--を含めない)
+ * @param value 変数の値
+ */
 export function setBookCSSVariable(name: string, value: BookCSSVariableValue): void;
+/**
+ * 本の各ページで利用できるようなCSS変数を定義する
+ * @param name 変数名(--を含めない)
+ * @param value 変数の値を取得する関数
+ */
 export function setBookCSSVariable(name: string, value: BookCSSVariableGetter): void;
 export function setBookCSSVariable(name: string, value: BookCSSVariableValue | BookCSSVariableGetter): void {
   variables.value.set(name, value);
@@ -45,14 +56,18 @@ export function injectBookCSSVariables(bookMeta: ParsedContentMeta, page: Parsed
       {
         innerHTML: `
   :root {
-    ${Object.entries(bookMeta ?? {})
+    ${Object.entries(bookMeta)
       .filter(([_, v]) => isValid(v))
       .map(([k, v]) => `--book-${k}: ${toValue(v)};`).join("\n    ")
     }
-    ${Object.entries(bookMeta?.props ?? {})
+    ${Object.entries(bookMeta.props)
       .filter((v): v is [string, BookCSSVariableValue] => isValid(v[1]))
       .map(([k, v]) => `--book-props-${k}: ${toValue(v)};`).join("\n    ")}
-    ${Object.entries(variables)
+    ${Object.entries(page)
+      .filter(([_, v]) => isValid(v))
+      .map(([k, v]) => `--page-${k}: ${toValue(v)};`).join("\n    ")
+    }
+    ${[...variables.entries()]
       .filter(([_, v]) => isValid(v))
       .map(([k, v]) => `--${k}: ${toValue(v)};`)
       .join("\n    ")}

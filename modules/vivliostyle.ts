@@ -43,11 +43,16 @@ export default defineNuxtModule<ModuleOptions>({
       const config = [];
 
       for (const book of await readdir(resolveRoot(options.contentDir))) {
+        if(book.startsWith(".")) continue;
         const bookRoot = resolveRoot(options.contentDir, book);
         const manuscripts = await readdir(bookRoot);
         const entry = manuscripts
-          .filter((file) => file.endsWith(".md"))
-          .map((file) => file.replace(".md", ".html"));
+          .filter((file) => file.endsWith(".md") && !file.startsWith("."))
+          .map((file) =>
+            file
+              .replace(".md", ".html")
+              .replace(/^\d+\./, "")
+        );
         const bookConfig = await loadConfig<VivliostyleConfigSchema>({
           cwd: bookRoot,
           defaultConfig: {

@@ -1,75 +1,111 @@
-# Nuxt Minimal Starter
+# `@e-chan1007/nuxt-vivliostyle`
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
 ## Setup
 
-Make sure to install dependencies:
+Install the dependency:
 
 ```bash
 # npm
-npm install
+npm install @e-chan1007/nuxt-vivliostyle
 
 # pnpm
-pnpm install
+pnpm install @e-chan1007/nuxt-vivliostyle
 
 # yarn
-yarn install
+yarn install @e-chan1007/nuxt-vivliostyle
 
 # bun
-bun install
+bun install @e-chan1007/nuxt-vivliostyle
 ```
 
-## Development Server
+> [!NOTE]
+> Using bun may cause problems when building Vivliostyle due to compatibility with Playwright.
 
-Start the development server on `http://localhost:3000`:
+Add to `nuxt.config`:
 
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+```ts
+defineNuxtConfig({
+  extends: '@e-chan1007/nuxt-vivliostyle'
+})
 ```
 
-## Production
+## Extend Example
 
-Build the application for production:
+### `~/content/book-example/config.yml`
+Values will be passed to Vivliostyle CLI at build time.
 
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+```yaml
+title: The Example Book
+author: e-chan1007
+props: # The props not related to Vivliostyle can be in `props`
+  hello: World
 ```
 
-Locally preview production build:
+### `~/content/book-example/1.book.md`
+Manuscripts will automatically read and passed to Vivliostyle CLI.
+Ordering and ignoring can work according to the [Content Directory](https://content.nuxt.com/usage/content-directory) specification.
 
-```bash
-# npm
-npm run preview
+```md
+---
+title: First Chapter
+---
 
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+# Hello World!
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+### `~/components/BookPageContainer.vue`
+If you want to apply CSS or change the layout of the page, place the `BookPageContainer.vue` to override the layer.
+
+```vue
+<script lang="ts" setup>
+import type { ParsedContentMeta } from "@nuxt/content";
+
+const { bookMeta, page } = defineProps<{
+  bookMeta: ParsedContentMeta;
+  page: ParsedContentMeta;
+}>();
+
+// Inject custom CSS variable
+setBookCSSVariable("pub-date", () => new Date().toDateString());
+</script>
+
+<template>
+  <header>
+    <!-- Access to the frontmatter -->
+    <h1>{{ page.title }}</h1>
+  </header>
+  <!-- <BookPageRenderer> is always required to render page and inject CSS variables -->
+  <BookPageRenderer :book-meta="bookMeta" :page="page" />
+</template>
+
+<!-- You can apply custom theme -->
+<style src="~/assets/styles/book/theme.css" scoped />
+```
+
+### `~/assets/styles/book/theme.css`
+```scss
+@page {
+  size: A4;
+  margin: 2cm;
+
+  @top-center {
+    // values in the config root can be accessed with the prefix --book
+    content: var(--book-title);
+  }
+  @bottom-center {
+    content: counter(page);
+  }
+  @bottom-right {
+    // custom variable
+    content: var(--pub-date);
+  }
+}
+```
+
+In default, these variables are defined:
+
+- `--book-***`: in the root of `~/content/[book-id]/config.yml`
+- `--book-props-***`: in the `props` section of `~/content/[book-id]/config.yml`
+- `--page-***`: in the frontmatter of `~/content/[book-id]/[slug].md`
