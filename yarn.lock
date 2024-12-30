@@ -12074,12 +12074,12 @@ __metadata:
   linkType: hard
 
 "unplugin@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "unplugin@npm:2.1.0"
+  version: 2.1.2
+  resolution: "unplugin@npm:2.1.2"
   dependencies:
     acorn: "npm:^8.14.0"
     webpack-virtual-modules: "npm:^0.6.2"
-  checksum: 10c0/f41d4ee1ccc3d8478afdfb4d5f52ddd34bcd3157ebe5ac804b9c5d0afe1e3d6fad5ef44f7bbf030e8a1c671e145fcc8547be46e21d080bd9729f6e97d86f9fd3
+  checksum: 10c0/ae24ee275de96a700df416c3241f910ac964011c2e23dc726feb768fe10fc40bef3dbe2d0d8d267ed988c6c3393c3a9782d5b7b30df4a27e8dab244d86b4d4be
   languageName: node
   linkType: hard
 

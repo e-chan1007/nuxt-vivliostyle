@@ -1,14 +1,12 @@
-import { writeFile, readdir } from "node:fs/promises";
-import { defineEventHandler, sendRedirect } from "h3";
+import type { VivliostyleConfigSchema } from "@vivliostyle/cli";
+import { build } from "@vivliostyle/cli";
+import { loadConfig } from "c12";
+import { readdir, writeFile } from "node:fs/promises";
 import {
-  addDevServerHandler,
   createResolver,
-  defineNuxtModule,
+  defineNuxtModule
 } from "nuxt/kit";
 import { DynamicPublicDirectory } from "vite-multiple-assets";
-import { build } from "@vivliostyle/cli";
-import type { VivliostyleConfigSchema } from "@vivliostyle/cli";
-import { loadConfig } from "c12";
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
