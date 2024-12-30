@@ -21,7 +21,7 @@ const { data: page } = await useAsyncData(
   () => queryContent(bookId, pageId).findOne(),
 );
 
-if (!bookMeta || !page) throw createError({ status: 404 });
+if (!bookMeta.value || !page.value) throw createError({ status: 404 });
 </script>
 
 <template>

@@ -31,6 +31,8 @@ defineNuxtConfig({
 })
 ```
 
+`nuxt dev` will start the server, and `nuxt generate` will build the Vivliostyle book.
+
 ## Extend Example
 
 ### `~/content/book-example/config.yml`
@@ -39,6 +41,8 @@ Values will be passed to Vivliostyle CLI at build time.
 ```yaml
 title: The Example Book
 author: e-chan1007
+size: A4
+cover: /book-example/cover.png # Refers ~/public/book-example/cover.png
 props: # The props not related to Vivliostyle can be in `props`
   hello: World
 ```
@@ -46,6 +50,7 @@ props: # The props not related to Vivliostyle can be in `props`
 ### `~/content/book-example/1.book.md`
 Manuscripts will automatically read and passed to Vivliostyle CLI.
 Ordering and ignoring can work according to the [Content Directory](https://content.nuxt.com/usage/content-directory) specification.
+All images should be placed in `~/public` and referenced with the absolute path.
 
 ```md
 ---

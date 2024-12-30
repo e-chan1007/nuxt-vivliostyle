@@ -14,6 +14,6 @@ const { bookMeta, page } = defineProps<{
 
 <style scoped>
 @page {
-  size: A4;
+  size: var(--book-size, A4);
 }
 </style>

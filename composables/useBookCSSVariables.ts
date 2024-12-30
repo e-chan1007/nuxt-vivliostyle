@@ -49,7 +49,7 @@ export function resolveBookCSSVariables(bookMeta: ParsedContentMeta, page: Parse
 export function injectBookCSSVariables(bookMeta: ParsedContentMeta, page: ParsedContentMeta): void {
   const variables = resolveBookCSSVariables(bookMeta, page);
   const isValid = (v: unknown): v is BookCSSVariableValue => typeof v === "string" || typeof v === "boolean" || typeof v === "number";
-  const toValue = (v: BookCSSVariableValue): string =>typeof v === "string" ? `"${v}"` : v.toString();
+  const toValue = (v: BookCSSVariableValue): string => typeof v === "string" ? `"${v}"` : v.toString();
 
   useServerHead({
     style: [
@@ -58,7 +58,7 @@ export function injectBookCSSVariables(bookMeta: ParsedContentMeta, page: Parsed
   :root {
     ${Object.entries(bookMeta)
       .filter(([_, v]) => isValid(v))
-      .map(([k, v]) => `--book-${k}: ${toValue(v)};`).join("\n    ")
+      .map(([k, v]) => k === "size" ? `--book-size: ${v}` : `--book-${k}: ${toValue(v)};`).join("\n    ")
     }
     ${Object.entries(bookMeta.props)
       .filter((v): v is [string, BookCSSVariableValue] => isValid(v[1]))

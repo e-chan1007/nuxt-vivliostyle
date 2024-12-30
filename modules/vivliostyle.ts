@@ -52,15 +52,21 @@ export default defineNuxtModule<ModuleOptions>({
             file
               .replace(".md", ".html")
               .replace(/^\d+\./, "")
+              .replace(/ /g, "-")
         );
         const bookConfig = await loadConfig<VivliostyleConfigSchema>({
           cwd: bookRoot,
           defaultConfig: {
             entry,
-            entryContext: resolveRoot("dist/raw", book),
+            entryContext: resolveRoot(".output/public/raw", book.replace(/ /g, "-")),
             output: resolveRoot(`dist/${book}.pdf`),
           },
         });
+        // @ts-expect-error
+        if(bookConfig.config.cover) {
+          // @ts-expect-error
+          bookConfig.config.cover = resolveRoot(".output/public", `./${bookConfig.config.cover}`);
+        }
         config.push(bookConfig.config);
       }
       await writeFile(configPath, JSON.stringify(config), "utf-8");
