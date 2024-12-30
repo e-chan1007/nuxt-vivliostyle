@@ -6,15 +6,9 @@ import { downloadTemplate } from "giget";
 import { exit } from "node:process";
 import { tmpdir } from "node:os";
 
-try {
-  if ((await lstat("./viewer")).isDirectory()) {
-    exit(0);
-  }
-} catch {}
-
 const { dir } = await downloadTemplate("gh:vivliostyle/vivliostyle.js#master", {
   cwd: tmpdir(),
-  force: true
+  force: true,
 });
 
 const execProcess = (command, args, cwd = dir) => {
@@ -22,11 +16,7 @@ const execProcess = (command, args, cwd = dir) => {
   return new Promise((resolve) => process.on("exit", resolve));
 };
 
-await writeFile(
-  join(dir, ".yarnrc.yml"),
-  "nodeLinker: node-modules",
-  "utf-8",
-);
+await writeFile(join(dir, ".yarnrc.yml"), "nodeLinker: node-modules", "utf-8");
 await execProcess("yarn", ["install"]);
 
 const netTSPath = join(dir, "packages/core/src/vivliostyle/net.ts");
@@ -34,10 +24,7 @@ const netTS = await readFile(netTSPath, "utf-8");
 const patch = await readFile("./vivliostyle-net.patch", "utf-8");
 await writeFile(netTSPath, applyPatch(netTS, patch), "utf-8");
 
-await execProcess(
-  "yarn",
-  ["build", "--ignore=@vivliostyle/react"],
-);
+await execProcess("yarn", ["build", "--ignore=@vivliostyle/react"]);
 
 await rm("./viewer", { recursive: true, force: true });
 await rename(join(dir, "packages/viewer/lib"), "./viewer");

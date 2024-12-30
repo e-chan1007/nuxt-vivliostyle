@@ -2,15 +2,13 @@ Index: net.ts
 ===================================================================
 --- net.ts
 +++ net.ts
-@@ -135,8 +135,12 @@
+@@ -135,8 +135,10 @@
          } else {
            // fallback to HTML
            request.overrideMimeType("text/html; charset=UTF-8");
          }
-+      } else if (/\?vue&.+$/i.test(url)) {
-+        if (/type=style/i.test(url)) {
++      } else if (/\?vue&.?type=style$/i.test(url) || /\.css$/i.test(url)) {
 +          request.setRequestHeader("Accept", "text/css");
-+        }
        } else if (/^data:,(<|%3c)/i.test(url)) {
          request.overrideMimeType("text/html; charset=UTF-8");
        } else if (/^data:,/i.test(url)) {
