@@ -13,12 +13,6 @@ export interface ModuleOptions {
   contentDir: string;
 }
 
-export type BookConfig = Partial<
-  {
-    props: Record<string, unknown>;
-  } & VivliostyleConfigSchema
->;
-
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: "nuxt-vivliostyle",
@@ -54,13 +48,12 @@ export default defineNuxtModule<ModuleOptions>({
         const entry = manuscripts
           .filter((file) => file.endsWith(".md"))
           .map((file) => file.replace(".md", ".html"));
-        const bookConfig = await loadConfig<BookConfig>({
+        const bookConfig = await loadConfig<VivliostyleConfigSchema>({
           cwd: bookRoot,
           defaultConfig: {
             entry,
             entryContext: resolveRoot("dist/raw", book),
             output: resolveRoot(`dist/${book}.pdf`),
-            props: {},
           },
         });
         config.push(bookConfig.config);

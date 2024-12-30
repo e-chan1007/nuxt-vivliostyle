@@ -22,6 +22,7 @@ export function resolveBookCSSVariable(name: string, bookMeta: ParsedContentMeta
   }
   return value;
 }
+
 export function resolveBookCSSVariables(bookMeta: ParsedContentMeta, page: ParsedContentMeta): Map<string, BookCSSVariableValue> {
   const result = new Map<string, BookCSSVariableValue>();
   for (const [name, value] of variables.value) {
@@ -32,4 +33,32 @@ export function resolveBookCSSVariables(bookMeta: ParsedContentMeta, page: Parse
     }
   }
   return result;
+}
+
+export function injectBookCSSVariables(bookMeta: ParsedContentMeta, page: ParsedContentMeta): void {
+  const variables = resolveBookCSSVariables(bookMeta, page);
+  const isValid = (v: unknown): v is BookCSSVariableValue => typeof v === "string" || typeof v === "boolean" || typeof v === "number";
+  const toValue = (v: BookCSSVariableValue): string =>typeof v === "string" ? `"${v}"` : v.toString();
+
+  useServerHead({
+    style: [
+      {
+        innerHTML: `
+  :root {
+    ${Object.entries(bookMeta ?? {})
+      .filter(([_, v]) => isValid(v))
+      .map(([k, v]) => `--book-${k}: ${toValue(v)};`).join("\n    ")
+    }
+    ${Object.entries(bookMeta?.props ?? {})
+      .filter((v): v is [string, BookCSSVariableValue] => isValid(v[1]))
+      .map(([k, v]) => `--book-props-${k}: ${toValue(v)};`).join("\n    ")}
+    ${Object.entries(variables)
+      .filter(([_, v]) => isValid(v))
+      .map(([k, v]) => `--${k}: ${toValue(v)};`)
+      .join("\n    ")}
+  }
+  `,
+      },
+    ],
+  });
 }

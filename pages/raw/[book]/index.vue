@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { ParsedContentMeta } from '@nuxt/content';
+
 const route = useRoute();
 const bookId =
   typeof route.params.book === "string"
@@ -12,12 +14,16 @@ const { data: pages } = await useAsyncData(`book.${bookId}.pages`, () =>
   queryContent(bookId).where({ _extension: "md" }).find(),
 );
 if (!bookMeta || !pages) throw createError({ status: 404 });
-
-definePageMeta({
-  layout: "raw-book-page",
-});
 </script>
 
 <template>
-  <BookPageRenderer v-for="page in pages" :key="page._id" :book-meta="bookMeta" :page="page" />
+  <div class="book-page"  v-for="page in pages" :key="page._id">
+    <BookPageContainer :book-meta="(bookMeta as ParsedContentMeta)" :page="page" />
+  </div>
 </template>
+
+<style scoped>
+.book-page {
+  break-before: page;
+}
+</style>
