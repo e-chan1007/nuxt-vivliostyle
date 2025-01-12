@@ -18,6 +18,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    preset: "static",
     prerender: {
       autoSubfolderIndex: false,
     },
@@ -26,14 +27,7 @@ export default defineNuxtConfig({
   vite: {
     server: {
       hmr: false,
-    },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: "modern-compiler",
-        },
-      },
-    },
+    }
   },
 
   experimental: {

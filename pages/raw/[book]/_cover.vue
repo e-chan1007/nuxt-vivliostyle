@@ -1,15 +1,7 @@
 <script lang="ts" setup>
-const route = useRoute();
-const bookId =
-  typeof route.params.book === "string"
-    ? route.params.book
-    : route.params.book?.[0];
-if (!bookId) throw createError({ status: 404 });
-const { data: bookMeta } = await useAsyncData(`books.${bookId}.meta`, () =>
-  queryContent(bookId)
-    .where({ _extension: { $eq: "yml" } })
-    .findOne(),
-);
+import { useBookMeta } from '~/composables/useBookMeta';
+
+const bookMeta = await useBookMeta();
 
 if (!bookMeta.value?.cover) throw createError({ status: 404 });
 const cover = bookMeta.value.cover;
